@@ -89,6 +89,56 @@ class Opponent extends Player {
   }
 }
 
+class Score {
+  constructor(player) {
+    this.player = player;
+    this.pixelSize = 10;
+    this.position = new Vector2();
+    this.currentScore = this.player.score;
+
+    this.digits = [
+      '111101101101111',
+      '010010010010010',
+      '111001111100111',
+      '111001011001111',
+      '101101111001001',
+      '111100111001111',
+      '111100111101111',
+      '111001001001001',
+      '111101111101111',
+      '111101111001111'
+    ];
+  }
+
+  update() {
+    if (this.player.score > this.currentScore)
+      this.currentScore = this.player.score;
+  }
+
+  draw(context) {
+    context.fillStyle = 'white';
+
+    const numbers = this.currentScore.toString().split('');
+    const digitWidth = 3 * this.pixelSize;
+    const numberWidth = numbers.length * digitWidth + (numbers.length - 1) * this.pixelSize;
+    
+    for (let i = 0, numLen = numbers.length; i < numLen; i++) {
+      for (let j = 0, binLen = this.digits[numbers[i]].length; j < binLen; j++) {
+        if (this.digits[numbers[i]][j] == 0) continue;
+
+        const x = j % 3 * this.pixelSize + i * (digitWidth + this.pixelSize);
+        const y = Math.floor(j / 3) * this.pixelSize;
+
+        context.fillRect(
+          this.position.x - digitWidth / 2 - numberWidth / 2 + Math.floor(x),
+          this.position.y + 10 + y,
+          this.pixelSize, this.pixelSize
+        );
+      }
+    }
+  }
+}
+
 class Game {
   constructor() {
     const canvas = document.getElementById('game');;
@@ -98,6 +148,12 @@ class Game {
     this.entities['ball'] = new Ball();
     this.entities['player'] = new Player();
     this.entities['opponent'] = new Opponent(this.entities['ball']);
+
+    this.entities['playerScore'] = new Score(this.entities['player']);
+    this.entities['opponentScore'] = new Score(this.entities['opponent']);
+
+    this.entities['playerScore'].position.x = WIDTH / 3
+    this.entities['opponentScore'].position.x = WIDTH - WIDTH / 3;
 
     this.reset();
   }
@@ -142,8 +198,5 @@ class Game {
 
     this.entities['player'].position = new Vector2(20, HEIGHT / 2);
     this.entities['opponent'].position = new Vector2(WIDTH - 20, HEIGHT / 2);
-
-    this.entities['player'].score = 0;
-    this.entities['opponent'].score = 0;
   }
 }
