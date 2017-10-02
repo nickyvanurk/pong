@@ -73,13 +73,12 @@ class Player extends Entity {
   update() {
     super.update();
 
+    if (this.velocity.y) this.velocity.y = 0;
+
     if (this.isMovingUp && this.top > this.size.x)
       this.velocity.y = -2;
     if (this.isMovingDown && this.bottom < HEIGHT - this.size.x)
       this.velocity.y = 2;
-
-    if (!this.isMovingUp && !this.isMovingDown && this.velocity.y)
-      this.velocity.y = 0;
   }
 }
 
