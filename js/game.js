@@ -137,7 +137,7 @@ class Score {
         const y = Math.floor(j / 3) * this.pixelSize;
 
         context.fillRect(
-          Math.floor(this.position.x - this.digitWidth / 2 - numberWidth / 2 + x),
+          Math.floor(this.position.x - numberWidth / 2 + x),
           this.position.y + 10 + y,
           this.pixelSize, this.pixelSize
         );
